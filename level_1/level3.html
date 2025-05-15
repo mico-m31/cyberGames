@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Password Game - Level 3</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f7f4;
+      color: #333;
+      padding: 40px;
+      max-width: 600px;
+      margin: auto;
+    }
+    
+    h1 {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    
+    p {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    
+    input[type="text"] {
+      font-size: 18px;
+      padding: 12px;
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      transition: border 0.3s ease;
+    }
+    
+    input[type="text"]:focus {
+      border-color: #6a0dad;
+      outline: none;
+    }
+    
+    #alerts {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .alert {
+      background-color: #fff;
+      border: 2px solid #ff4d4f;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #d8000c;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      position: relative;
+    }
+    
+    .alert::before {
+      content: "⚠️ ";
+      margin-right: 6px;
+    }
+    
+    .alert.passed {
+      border-color: #52c41a;
+      color: #2d862d;
+      background-color: #f6ffed;
+    }
+    
+    .alert.passed::before {
+      content: "✅ ";
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .instructions {
+      background-color: #fff;
+      border-left: 4px solid #6a0dad;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 25px;
+    }
+
+    .progress-container {
+      width: 100%;
+      background-color: #e0e0e0;
+      border-radius: 10px;
+      margin: 20px 0;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 10px;
+      background-color: #6a0dad;
+      width: 0%;
+      transition: width 0.5s ease-in-out;
+    }
+
+    #completeGameBtn {
+      display: none;
+      margin: 20px auto;
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #6a0dad;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      width: 100%;
+    }
+
+    #completeGameBtn:hover {
+      background-color: #5a0c93;
+    }
+
+    .infoCard {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .infoCard h3 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      color: #6a0dad;
+    }
+
+    .infoCard p {
+      margin-bottom: 12px;
+    }
+
+    .didYouKnow {
+      font-style: italic;
+      font-size: 16px;
+      color: #555;
+      padding: 10px;
+      border-left: 3px solid #6a0dad;
+      background-color: rgba(106, 13, 173, 0.1);
+      margin-top: 15px;
+    }
+
+    /* Form styles */
+    .formGroup {
+      margin-bottom: 20px;
+    }
+
+    .formGroup label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .btn {
+      background-color: #6a0dad;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #5a0c93;
+    }
+
+    .btn-secondary {
+      background-color: #f5f5f5;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+
+    .btn-secondary:hover {
+      background-color: #e5e5e5;
+    }
+
+    .tip {
+      font-size: 14px;
+      color: #888;
+      margin-top: 6px;
+    }
+
+    @keyframes celebrate {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .celebrate {
+      animation: celebrate 0.5s ease;
+    }
+
+    .completion-container {
+      margin-top: 30px;
+      border-top: 1px solid #eee;
+      padding-top: 20px;
+      text-align: center;
+    }
+
+    .trophy {
+      font-size: 60px;
+      margin-bottom: 10px;
+    }
+
+    .security-meter {
+      height: 24px;
+      width: 100%;
+      background-color: #e0e0e0;
+      border-radius: 12px;
+      margin: 15px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .security-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(to right, #ff4d4f 0%, #faad14 50%, #52c41a 100%);
+      border-radius: 12px;
+      transition: width 1s ease;
+    }
+
+    .security-score {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #333;
+      font-weight: bold;
+      text-shadow: 0px 0px 2px #fff;
+    }
+
+    /* 2FA specific styles */
+    .infoBox {
+      display: flex;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .infoBox-item {
+      flex: 1;
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      text-align: center;
+    }
+
+    .infoBox-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .phoneView {
+      background-color: #222;
+      border-radius: 20px;
+      padding: 15px;
+      width: 220px;
+      margin: 20px auto;
+      color: white;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .phoneHeader {
+      text-align: center;
+      font-weight: bold;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #444;
+      margin-bottom: 15px;
+    }
+
+    .phoneContent {
+      text-align: center;
+    }
+
+    .authCode {
+      font-family: 'Courier New', monospace;
+      font-size: 24px;
+      letter-spacing: 3px;
+      background-color: #333;
+      padding: 10px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .authCodeTimer {
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 5px;
+    }
+
+    .qrcode {
+      width: 160px;
+      height: 160px;
+      background-color: white;
+      padding: 8px;
+      margin: 15px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .tab-container {
+      display: flex;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: #f5f5f5;
+      border: 1px solid #ddd;
+      border-bottom: none;
+      border-radius: 4px 4px 0 0;
+      margin-right: 5px;
+    }
+
+    .tab.active {
+      background-color: white;
+      border-bottom: 1px solid white;
+      margin-bottom: -1px;
+      font-weight: bold;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 20px;
+      background-color: white;
+      border: 1px solid #ddd;
+      border-top: none;
+      border-radius: 0 0 4px 4px;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 80%;
+      text-align: center;
+    }
+
+    /* Security Shield Animation */
+    .shield-container {
+      position: relative;
+      width: 120px;
+      height: 140px;
+      margin: 20px auto;
+    }
+
+    .shield {
+      width: 100%;
+      height: 100%;
+      background-color: #6a0dad;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 40px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.9; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .security-comparison {
+      display: flex;
+      gap: 20px;
+      margin: 25px 0;
+    }
+
+    .security-level {
+      flex: 1;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .low-security {
+      background-color: #fff2f0;
+      border: 1px solid #ffccc7;
+    }
+
+    .medium-security {
+      background-color: #fffbe6;
+      border: 1px solid #ffe58f;
+    }
+
+    .high-security {
+      background-color: #f6ffed;
+      border: 1px solid #b7eb8f;
+    }
+
+    .security-level h4 {
+      margin-top: 0;
+    }
+
+    .security-icon {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    /* Back button */
+    .back-button {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #6a0dad;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .back-button:hover {
+      text-decoration: underline;
+    }
+
+    /* Navigation buttons */
+    .btn-container {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .btn-container .btn {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <a href="level2.html" class="back-button">← Back to Level 2</a>
+
+  <div class="header">
+    <h1>Password Game - Level 3 🔒</h1>
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+    </div>
+  </div>
+
+  <div class="infoCard">
+    <h3>Welcome to Level 3: Two-Factor Authentication 🛡️</h3>
+    <p>In this level, you'll learn about 2FA - an essential security layer that protects your accounts even if your password is compromised.</p>
+    <div class="didYouKnow">
+      <strong>Did you know?</strong> Accounts protected by 2FA are up to 99.9% less likely to be compromised compared to accounts with passwords alone.
+    </div>
+  </div>
+
+  <div class="security-comparison">
+    <div class="security-level low-security">
+      <div class="security-icon">🔑</div>
+      <h4>Password Only</h4>
+      <p>Basic protection</p>
+    </div>
+    <div class="security-level medium-security">
+      <div class="security-icon">🔑+📱</div>
+      <h4>Password + Social Login</h4>
+      <p>Better protection</p>
+    </div>
+    <div class="security-level high-security">
+      <div class="security-icon">🔑+📱+🔢</div>
+      <h4>Password + Social + 2FA</h4>
+      <p>Maximum protection</p>
+    </div>
+  </div>
+
+  <div class="instructions">
+    <p>Complete the steps below to set up Two-Factor Authentication for your account!</p>
+  </div>
+  
+  <div id="alerts"></div>
+
+  <div class="tab-container">
+    <div class="tab active" data-tab="learn">Learn</div>
+    <div class="tab" data-tab="setup">Setup 2FA</div>
+    <div class="tab" data-tab="verify">Verify</div>
+  </div>
+
+  <div id="learnTab" class="tab-content active">
+    <h3>What is Two-Factor Authentication?</h3>
+    <p>Two-Factor Authentication (2FA) adds an extra layer of security by requiring two different types of verification:</p>
+    
+    <div class="infoBox">
+      <div class="infoBox-item">
+        <div class="infoBox-icon">1️⃣</div>
+        <h4>Something you know</h4>
+        <p>Your password</p>
+      </div>
+      <div class="infoBox-item">
+        <div class="infoBox-icon">2️⃣</div>
+        <h4>Something you have</h4>
+        <p>Your phone or security key</p>
+      </div>
+    </div>
+    
+    <p>Even if someone steals your password, they still can't access your account without the second factor!</p>
+    
+    <div class="shield-container">
+      <div class="shield">2FA</div>
+    </div>
+    
+    <button id="learnContinueBtn" class="btn">Continue to Setup</button>
+  </div>
+
+  <div id="setupTab" class="tab-content">
+    <h3>Set Up Your Authenticator</h3>
+    <p>To set up 2FA, you need an authenticator app on your phone that generates temporary codes.</p>
+    
+    <div class="qrcode">
+      <img src="/level_1/images/qr-code.png" alt="QR Code" width="160" height="160">
+    </div>
+    
+    <p>1. Install an authenticator app like Google Authenticator or Authy</p>
+    <p>2. Scan this QR code with your app</p>
+    <p>3. Or manually enter this key:</p>
+    
+    <div style="font-family: monospace; background-color: #f5f5f5; padding: 10px; border-radius: 4px; text-align: center; margin: 15px 0;">
+      HDKS-WQPL-OIJN-VXYZ
+    </div>
+    
+    <div class="phoneView">
+      <div class="phoneHeader">Authenticator App</div>
+      <div class="phoneContent">
+        <p>Your Account</p>
+        <div class="authCode">123 456</div>
+        <div class="authCodeTimer">Expires in: <span id="codeTimer">30</span>s</div>
+      </div>
+    </div>
+    
+    <button id="setupContinueBtn" class="btn">Continue to Verify</button>
+  </div>
+
+  <div id="verifyTab" class="tab-content">
+    <h3>Verify Your Two-Factor Authentication</h3>
+    <p>Enter the 6-digit code from your authenticator app to verify setup:</p>
+    
+    <div class="formGroup">
+      <input type="text" id="verificationCode" placeholder="Enter 6-digit code" maxlength="6" />
+      <p class="tip">This code changes every 30 seconds</p>
+    </div>
+    
+    <button id="verifyBtn" class="btn">Verify & Complete Setup</button>
+  </div>
+
+  <div id="completion" style="display: none;">
+    <div class="security-meter">
+      <div class="security-bar" id="securityBar"></div>
+      <div class="security-score" id="securityScore">0%</div>
+    </div>
+    <div class="completion-container">
+      <div class="trophy">🏆</div>
+      <h3>Congratulations!</h3>
+      <h2>Password Game Complete!</h2>
+      <p>You've mastered all three levels of account security:</p>
+      <p>✅ Strong password creation</p>
+      <p>✅ Social login authentication</p>
+      <p>✅ Two-factor authentication</p>
+      <p>Your accounts are now fortified with multiple layers of protection!</p>
+      <button id="completeGameBtn" class="btn">Claim Your Security Expert Badge 🥇</button>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div id="successModal" class="modal">
+    <div class="modal-content">
+      <h2>Congratulations! 🎉</h2>
+      <img src="/level_1/images/security-badge.png" alt="Security Expert Badge" style="margin: 20px 0; width: 200px;">
+      <h3>Security Expert Badge Awarded!</h3>
+      <p>You've successfully completed all three levels of the Password Game and learned essential account security practices.</p>
+      <p>Remember to apply these security principles to all your online accounts!</p>
+      <div class="btn-container">
+        <button id="endScreenBtn" class="btn">View End Screen</button>
+        <button id="restartBtn" class="btn btn-secondary">Start Over</button>
+        <button id="closeBtn" class="btn btn-secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // DOM Elements
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const learnContinueBtn = document.getElementById('learnContinueBtn');
+    const setupContinueBtn = document.getElementById('setupContinueBtn');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const verificationCode = document.getElementById('verificationCode');
+    const completion = document.getElementById('completion');
+    const completeGameBtn = document.getElementById('completeGameBtn');
+    const progressBar = document.getElementById('progressBar');
+    const securityBar = document.getElementById('securityBar');
+    const securityScore = document.getElementById('securityScore');
+    const alertsContainer = document.getElementById('alerts');
+    const successModal = document.getElementById('successModal');
+    const closeBtn = document.getElementById('closeBtn');
+    const endScreenBtn = document.getElementById('endScreenBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const codeTimer = document.getElementById('codeTimer');
+    
+    // Variables
+    let currentProgress = 0;
+    let timerInterval;
+    let timerValue = 30;
+    
+    // Initialize
+    updateProgress(0);
+    startCodeTimer();
+    
+    // Tab functionality
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const tabId = tab.getAttribute('data-tab');
+        
+        // Only allow switching to tabs that should be accessible
+        if ((tabId === 'setup' && currentProgress < 33) || 
+            (tabId === 'verify' && currentProgress < 66)) {
+          return;
+        }
+        
+        // Update active tab
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        // Show corresponding content
+        tabContents.forEach(content => {
+          content.classList.remove('active');
+          if (content.id === `${tabId}Tab`) {
+            content.classList.add('active');
+          }
+        });
+      });
+    });
+    
+    // Learn continue button
+    learnContinueBtn.addEventListener('click', () => {
+      // Activate setup tab
+      activateTab('setup');
+      updateProgress(33);
+      addAlert("Learning about Two-Factor Authentication completed!", true);
+    });
+    
+    // Setup continue button
+    setupContinueBtn.addEventListener('click', () => {
+      // Activate verify tab
+      activateTab('verify');
+      updateProgress(66);
+      addAlert("2FA app setup completed!", true);
+    });
+    
+    // Verify button
+    verifyBtn.addEventListener('click', () => {
+      const code = verificationCode.value.trim();
+      
+      if (code.length !== 6 || !/^\d{6}$/.test(code)) {
+        addAlert("Please enter a valid 6-digit code");
+        return;
+      }
+      
+      // For this demo, any 6-digit code is accepted
+      verifySuccess();
+    });
+    
+    // Complete game button
+    completeGameBtn.addEventListener('click', () => {
+      successModal.style.display = 'flex';
+    });
+    
+    // Close modal button
+    closeBtn.addEventListener('click', () => {
+      successModal.style.display = 'none';
+    });
+
+    // End Screen button
+    endScreenBtn.addEventListener('click', () => {
+      window.location.href = "end_screen.html";
+    });
+
+    // Restart button
+    restartBtn.addEventListener('click', () => {
+      window.location.href = "level1.html";
+    });
+    
+    // Helper functions
+    function activateTab(tabId) {
+      tabs.forEach(tab => {
+        tab.classList.toggle('active', tab.getAttribute('data-tab') === tabId);
+      });
+      
+      tabContents.forEach(content => {
+        content.classList.toggle('active', content.id === `${tabId}Tab`);
+      });
+    }
+    
+    function updateProgress(percent) {
+      currentProgress = percent;
+      progressBar.style.width = `${percent}%`;
+    }
+    
+    function addAlert(message, passed = false) {
+      alertsContainer.innerHTML = '';
+      const alert = document.createElement('div');
+      alert.className = 'alert ' + (passed ? 'passed' : '');
+      alert.textContent = message;
+      alertsContainer.appendChild(alert);
+    }
+    
+    function verifySuccess() {
+      // Hide tabs
+      document.querySelector('.tab-container').style.display = 'none';
+      tabContents.forEach(content => content.classList.remove('active'));
+      
+      // Show completion
+      completion.style.display = 'block';
+      
+      // Animate security score
+      animateSecurityScore();
+      
+      // Update progress
+      updateProgress(100);
+      
+      // Show complete game button
+      setTimeout(() => {
+        completeGameBtn.style.display = 'block';
+        completeGameBtn.classList.add('celebrate');
+        setTimeout(() => {
+          completeGameBtn.classList.remove('celebrate');
+        }, 500);
+      },
+      2000);
+      
+      addAlert("Two-Factor Authentication successfully set up! Your account is now secure.", true);
+    }
+    
+    function animateSecurityScore() {
+      let score = 0;
+      const targetScore = 100; // 2FA provides maximum security
+      
+      const interval = setInterval(() => {
+        score += 1;
+        securityBar.style.width = `${score}%`;
+        securityScore.textContent = `${score}%`;
+        
+        if (score >= targetScore) {
+          clearInterval(interval);
+        }
+      }, 20);
+    }
+    
+    function startCodeTimer() {
+      // Reset timer
+      clearInterval(timerInterval);
+      timerValue = 30;
+      codeTimer.textContent = timerValue;
+      
+      // Start countdown
+      timerInterval = setInterval(() => {
+        timerValue--;
+        codeTimer.textContent = timerValue;
+        
+        if (timerValue <= 0) {
+          // Generate new "code"
+          document.querySelector('.authCode').textContent = generateRandomCode();
+          timerValue = 30;
+        }
+      }, 1000);
+    }
+    
+    function generateRandomCode() {
+      const digits = '0123456789';
+      let code = '';
+      for (let i = 0; i < 6; i++) {
+        if (i === 3) code += ' ';
+        code += digits[Math.floor(Math.random() * 10)];
+      }
+      return code;
+    }
+    
+    // Initialize with first random code
+    document.querySelector('.authCode').textContent = generateRandomCode();
+    
+    // Add initial educational alert
+    addAlert("Learn about Two-Factor Authentication (2FA) to maximize your account security!", true);
+  </script>
+</body>
+</html>

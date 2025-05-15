@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Password Game - Level 1</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fffbe6;
+      color: #333;
+      padding: 40px;
+      max-width: 600px;
+      margin: auto;
+    }
+    
+    h1 {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    
+    p {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    
+    input[type="password"], input[type="text"] {
+      font-size: 18px;
+      padding: 12px;
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      transition: border 0.3s ease;
+    }
+    
+    input[type="password"]:focus, input[type="text"]:focus {
+      border-color: #4CAF50;
+      outline: none;
+    }
+    
+    #alerts {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .alert {
+      background-color: #fff;
+      border: 2px solid #ff4d4f;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #d8000c;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      position: relative;
+    }
+    
+    .alert::before {
+      content: "⚠️ ";
+      margin-right: 6px;
+    }
+    
+    .alert.passed {
+      border-color: #52c41a;
+      color: #2d862d;
+      background-color: #f6ffed;
+    }
+    
+    .alert.passed::before {
+      content: "✅ ";
+    }
+    
+    .tooltip {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 18px;
+      color: #555;
+    }
+    
+    .tooltip-content {
+      display: none;
+      position: absolute;
+      top: 28px;
+      right: 0;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 12px;
+      font-size: 14px;
+      width: max-content;
+      max-width: 220px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      z-index: 10;
+      color: #333;
+    }
+    
+    .tooltip-content ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+    
+    .tooltip-content li {
+      margin-bottom: 4px;
+    }
+    
+    .tooltip:hover .tooltip-content {
+      display: block;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .instructions {
+      background-color: #e6f7ff;
+      border-left: 4px solid #1890ff;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 25px;
+    }
+
+    .progress-container {
+      width: 100%;
+      background-color: #e0e0e0;
+      border-radius: 10px;
+      margin: 20px 0;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 10px;
+      background-color: #4CAF50;
+      width: 0%;
+      transition: width 0.5s ease-in-out;
+    }
+
+    #nextLevelBtn {
+      display: none;
+      margin: 20px auto;
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      width: 100%;
+    }
+
+    #nextLevelBtn:hover {
+      background-color: #45a049;
+    }
+
+    .strength-meter {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .strength-meter-bar {
+      height: 8px;
+      flex-grow: 1;
+      border-radius: 5px;
+      background-color: #e0e0e0;
+      margin-right: 10px;
+    }
+
+    .strength-meter-value {
+      height: 100%;
+      border-radius: 5px;
+      width: 0%;
+      transition: width 0.3s ease, background-color 0.3s ease;
+    }
+
+    .strength-text {
+      font-weight: bold;
+      min-width: 70px;
+      text-align: right;
+    }
+
+    @keyframes celebrate {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .celebration {
+      animation: celebrate 0.5s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Password Game 🧩</h1>
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="instructions">
+      <p>Create a password that meets all the criteria below to advance to the next level!</p>
+    </div>
+  </div>
+
+  <input type="text" id="password" placeholder="Enter your password..." />
+  
+  <div class="strength-meter">
+    <div class="strength-meter-bar">
+      <div class="strength-meter-value" id="strengthValue"></div>
+    </div>
+    <div class="strength-text" id="strengthText">Weak</div>
+  </div>
+  
+  <div id="alerts"></div>
+  
+  <button id="nextLevelBtn">🎉 Congratulations! Go to Level 2 →</button>
+
+  <!-- Tooltip Data -->
+  <template id="tooltip-5">
+    <ul>
+      <li>January</li>
+      <li>February</li>
+      <li>March</li>
+      <li>April</li>
+      <li>May</li>
+      <li>June</li>
+      <li>July</li>
+      <li>August</li>
+      <li>September</li>
+      <li>October</li>
+      <li>November</li>
+      <li>December</li>
+    </ul>
+  </template>
+
+  <template id="tooltip-7">
+    <ul>
+      <li>Cat</li>
+      <li>Dog</li>
+      <li>Lion</li>
+      <li>Tiger</li>
+      <li>Bear</li>
+      <li>Monkey</li>
+      <li>Elephant</li>
+      <li>Giraffe</li>
+      <li>Rabbit</li>
+      <li>Fox</li>
+    </ul>
+  </template>
+
+  <template id="tooltip-8">
+    <ul>
+      <li>Red</li>
+      <li>Blue</li>
+      <li>Green</li>
+      <li>Yellow</li>
+      <li>Black</li>
+      <li>White</li>
+      <li>Orange</li>
+      <li>Purple</li>
+      <li>Brown</li>
+      <li>Pink</li>
+    </ul>
+  </template>
+
+  <script>
+    const passwordInput = document.getElementById("password");
+    const alertsContainer = document.getElementById("alerts");
+    const progressBar = document.getElementById("progressBar");
+    const strengthValue = document.getElementById("strengthValue");
+    const strengthText = document.getElementById("strengthText");
+    const nextLevelBtn = document.getElementById("nextLevelBtn");
+
+    const rules = [
+      {
+        message: "1. Password must be at least 8 characters long.",
+        check: pw => pw.length >= 8,
+        active: true
+      },
+      {
+        message: "2. Must contain at least one number.",
+        check: pw => /\d/.test(pw),
+        active: false,
+        dependency: 0
+      },
+      {
+        message: "3. Must contain at least one uppercase letter.",
+        check: pw => /[A-Z]/.test(pw),
+        active: false,
+        dependency: 1
+      },
+      {
+        message: "4. Must contain at least one symbol (!@#$%^&*).",
+        check: pw => /[!@#$%^&*]/.test(pw),
+        active: false,
+        dependency: 2
+      },
+      {
+        message: "5. Must include a month name.",
+        check: pw => {
+          const months = [
+            "january","february","march","april","may","june","july","august","september","october","november","december"
+          ];
+          return months.some(month => pw.toLowerCase().includes(month));
+        },
+        active: false,
+        dependency: 3
+      },
+      {
+        message: "6. Must include a year between 1900 and 2099.",
+        check: pw => /(19\d{2}|20\d{2})/.test(pw),
+        active: false,
+        dependency: 4
+      },
+      {
+        message: "7. Must include an animal name.",
+        check: pw => {
+          const animals = [
+            "cat","dog","lion","tiger","bear","monkey","elephant","giraffe","rabbit","fox"
+          ];
+          return animals.some(animal => pw.toLowerCase().includes(animal));
+        },
+        active: false,
+        dependency: 5
+      },
+      {
+        message: "8. Must include a color name.",
+        check: pw => {
+          const colors = [
+            "red","blue","green","yellow","black","white","orange","purple","brown","pink"
+          ];
+          return colors.some(color => pw.toLowerCase().includes(color));
+        },
+        active: false,
+        dependency: 6
+      }
+    ];
+
+    // Function to update password strength meter
+    function updateStrengthMeter(passedCount) {
+      const percentage = (passedCount / rules.length) * 100;
+      strengthValue.style.width = `${percentage}%`;
+      
+      if (percentage < 25) {
+        strengthValue.style.backgroundColor = "#ff4d4f";
+        strengthText.textContent = "Weak";
+        strengthText.style.color = "#ff4d4f";
+      } else if (percentage < 50) {
+        strengthValue.style.backgroundColor = "#faad14";
+        strengthText.textContent = "Fair";
+        strengthText.style.color = "#faad14";
+      } else if (percentage < 75) {
+        strengthValue.style.backgroundColor = "#1890ff";
+        strengthText.textContent = "Good";
+        strengthText.style.color = "#1890ff";
+      } else if (percentage < 100) {
+        strengthValue.style.backgroundColor = "#52c41a";
+        strengthText.textContent = "Strong";
+        strengthText.style.color = "#52c41a";
+      } else {
+        strengthValue.style.backgroundColor = "#52c41a";
+        strengthText.textContent = "Perfect!";
+        strengthText.style.color = "#52c41a";
+        strengthText.classList.add("celebration");
+        setTimeout(() => {
+          strengthText.classList.remove("celebration");
+        }, 500);
+      }
+    }
+
+    // Function to update active rules based on previous rules being passed
+    function updateActiveRules(pw) {
+      // First rule is always active
+      for (let i = 1; i < rules.length; i++) {
+        const dependencyIndex = rules[i].dependency;
+        rules[i].active = rules[dependencyIndex].active && rules[dependencyIndex].check(pw);
+      }
+    }
+
+    passwordInput.addEventListener("input", () => {
+      const pw = passwordInput.value;
+      alertsContainer.innerHTML = "";
+      let passedCount = 0;
+      let visibleCount = 0;
+      
+      // Update which rules should be active based on dependencies
+      updateActiveRules(pw);
+
+      for (let i = 0; i < rules.length; i++) {
+        const rule = rules[i];
+        
+        // Skip rules that aren't active yet
+        if (!rule.active) continue;
+        
+        visibleCount++;
+        const passed = rule.check(pw);
+        const alert = document.createElement("div");
+        alert.className = "alert " + (passed ? "passed" : "");
+        alert.textContent = rule.message;
+
+        if (passed) passedCount++;
+
+        // Add tooltips for certain rules
+        if ([4, 6, 7].includes(i)) {
+          const tooltipId = `tooltip-${i + 1}`;
+          const tooltipTemplate = document.getElementById(tooltipId);
+          if (tooltipTemplate) {
+            const tooltip = document.createElement("span");
+            tooltip.className = "tooltip";
+            tooltip.innerHTML = "ℹ️";
+            const content = document.createElement("div");
+            content.className = "tooltip-content";
+            content.innerHTML = tooltipTemplate.innerHTML;
+            tooltip.appendChild(content);
+            alert.appendChild(tooltip);
+          }
+        }
+
+        alertsContainer.appendChild(alert);
+        
+        // Add a fun reveal animation for new rules
+        if (i > 0 && passed && i+1 < rules.length && !rules[i+1].active) {
+          setTimeout(() => {
+            rules[i+1].active = true;
+            // Trigger the input event again to refresh the display
+            const event = new Event('input');
+            passwordInput.dispatchEvent(event);
+          }, 300);
+        }
+      }
+
+      // Only count visible rules for the progress
+      const activeRuleCount = rules.filter(r => r.active).length;
+      const progress = (passedCount / rules.length) * 100;
+      progressBar.style.width = `${progress}%`;
+      updateStrengthMeter(passedCount);
+
+      // Show Next Level button if all rules passed
+      if (passedCount === rules.length) {
+        nextLevelBtn.style.display = "block";
+        nextLevelBtn.classList.add("celebration");
+        setTimeout(() => {
+          nextLevelBtn.classList.remove("celebration");
+        }, 500);
+      } else {
+        nextLevelBtn.style.display = "none";
+      }
+    });
+
+    // When user clicks the Next Level button - MODIFIED FOR PROPER NAVIGATION
+    nextLevelBtn.addEventListener("click", () => {
+      // Create modal for level completion
+      const modal = document.createElement("div");
+      modal.style.position = "fixed";
+      modal.style.top = "0";
+      modal.style.left = "0";
+      modal.style.width = "100%";
+      modal.style.height = "100%";
+      modal.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+      modal.style.display = "flex";
+      modal.style.justifyContent = "center";
+      modal.style.alignItems = "center";
+      modal.style.zIndex = "1000";
+
+      const content = document.createElement("div");
+      content.style.backgroundColor = "white";
+      content.style.padding = "30px";
+      content.style.borderRadius = "10px";
+      content.style.maxWidth = "80%";
+      content.style.textAlign = "center";
+
+      content.innerHTML = `
+        <h2>Congratulations! 🎉</h2>
+        <p>You've successfully created a strong password.</p>
+        <p>Level 2 will teach you about social login authentication.</p>
+        <button id="continueBtn" style="background-color: #4CAF50; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-top: 15px;">Continue to Level 2</button>
+      `;
+
+      modal.appendChild(content);
+      document.body.appendChild(modal);
+
+      document.getElementById("continueBtn").addEventListener("click", () => {
+        // Navigate to level 2
+        window.location.href = "level2.html";
+      });
+    });
+  </script>
+</body>
+</html>

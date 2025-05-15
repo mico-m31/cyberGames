@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Password Game - Learn Account Security</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      padding: 0;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .container {
+      max-width: 900px;
+      padding: 40px;
+      text-align: center;
+    }
+    
+    header {
+      margin-bottom: 40px;
+    }
+    
+    h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      color: #444;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+    
+    h2 {
+      font-size: 24px;
+      color: #666;
+      font-weight: normal;
+      margin-bottom: 30px;
+    }
+    
+    .game-box {
+      background-color: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      margin-bottom: 40px;
+    }
+    
+    .levels {
+      display: flex;
+      justify-content: space-between;
+      margin: 40px 0;
+      flex-wrap: wrap;
+    }
+    
+    .level-card {
+      flex: 1;
+      margin: 0 15px;
+      padding: 25px 20px;
+      background-color: #f9f9f9;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+      min-width: 200px;
+      margin-bottom: 20px;
+    }
+    
+    .level-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    
+    .level-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+    }
+    
+    .level-1::before { 
+      background-color: #4CAF50;
+    }
+    
+    .level-2::before {
+      background-color: #1890ff;
+    }
+    
+    .level-3::before {
+      background-color: #6a0dad;
+    }
+    
+    .level-card h3 {
+      font-size: 22px;
+      margin-bottom: 15px;
+    }
+    
+    .level-card .icon {
+      font-size: 50px;
+      margin-bottom: 20px;
+    }
+    
+    .level-1 .icon { color: #4CAF50; }
+    .level-2 .icon { color: #1890ff; }
+    .level-3 .icon { color: #6a0dad; }
+    
+    .start-btn {
+      display: inline-block;
+      padding: 15px 40px;
+      background-color: #6a0dad;
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 500;
+      border-radius: 30px;
+      box-shadow: 0 5px 15px rgba(106, 13, 173, 0.3);
+      transition: transform 0.3s, background-color 0.3s, box-shadow 0.3s;
+      margin-top: 20px;
+    }
+    
+    .start-btn:hover {
+      transform: translateY(-3px);
+      background-color: #5a0c93;
+      box-shadow: 0 8px 20px rgba(106, 13, 173, 0.4);
+    }
+    
+    .start-btn:active {
+      transform: translateY(-1px);
+    }
+    
+    .security-stats {
+      display: flex;
+      justify-content: space-around;
+      margin: 40px 0;
+      flex-wrap: wrap;
+    }
+    
+    .stat {
+      text-align: center;
+      margin: 15px;
+      min-width: 160px;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: bold;
+      color: #6a0dad;
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      color: #666;
+      font-size: 16px;
+    }
+    
+    footer {
+      margin-top: 50px;
+      color: #999;
+      font-size: 14px;
+    }
+    
+    @media (max-width: 768px) {
+      .levels {
+        flex-direction: column;
+      }
+      
+      .level-card {
+        margin: 10px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🔒 The Password Game</h1>
+      <h2>Learn how to protect your online accounts through interactive challenges</h2>
+    </header>
+    
+    <div class="game-box">
+      <p>In a world where cyber threats are constantly evolving, strong account security is more important than ever. Play through our interactive game to learn essential security practices that will keep your online accounts safe!</p>
+      
+      <div class="security-stats">
+        <div class="stat">
+          <div class="stat-number">80%</div>
+          <div class="stat-label">of data breaches involve weak passwords</div>
+        </div>
+        
+        <div class="stat">
+          <div class="stat-number">99.9%</div>
+          <div class="stat-label">reduction in account compromise with 2FA</div>
+        </div>
+        
+        <div class="stat">
+          <div class="stat-number">24/7</div>
+          <div class="stat-label">protection with proper security measures</div>
+        </div>
+      </div>
+      
+      <div class="levels">
+        <div class="level-card level-1">
+          <div class="icon">🔑</div>
+          <h3>Level 1</h3>
+          <p>Strong Password Creation</p>
+          <p>Learn to create complex passwords that are difficult to crack but easy to remember.</p>
+        </div>
+        
+        <div class="level-card level-2">
+          <div class="icon">📱</div>
+          <h3>Level 2</h3>
+          <p>Social Login</p>
+          <p>Discover how social login provides convenience while maintaining security.</p>
+        </div>
+        
+        <div class="level-card level-3">
+          <div class="icon">🛡️</div>
+          <h3>Level 3</h3>
+          <p>Two-Factor Authentication</p>
+          <p>Set up 2FA to add an essential extra layer of protection to your accounts.</p>
+        </div>
+      </div>
+      
+      <a href="level1.html" class="start-btn">Start Game</a>
+    </div>
+    
+    <footer>
+      <p>© 2025 The Password Game | Educational purposes only</p>
+    </footer>
+  </div>
+</body>
+</html>

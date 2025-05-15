@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Password Game - Level 2</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #e6f7ff;
+      color: #333;
+      padding: 40px;
+      max-width: 600px;
+      margin: auto;
+    }
+    
+    h1 {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    
+    p {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    
+    input[type="text"], input[type="email"] {
+      font-size: 18px;
+      padding: 12px;
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      transition: border 0.3s ease;
+    }
+    
+    input[type="text"]:focus, input[type="email"]:focus {
+      border-color: #4CAF50;
+      outline: none;
+    }
+    
+    #alerts {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .alert {
+      background-color: #fff;
+      border: 2px solid #ff4d4f;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #d8000c;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      position: relative;
+    }
+    
+    .alert::before {
+      content: "⚠️ ";
+      margin-right: 6px;
+    }
+    
+    .alert.passed {
+      border-color: #52c41a;
+      color: #2d862d;
+      background-color: #f6ffed;
+    }
+    
+    .alert.passed::before {
+      content: "✅ ";
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .instructions {
+      background-color: #fff;
+      border-left: 4px solid #1890ff;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 25px;
+    }
+
+    .progress-container {
+      width: 100%;
+      background-color: #e0e0e0;
+      border-radius: 10px;
+      margin: 20px 0;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 10px;
+      background-color: #1890ff;
+      width: 0%;
+      transition: width 0.5s ease-in-out;
+    }
+
+    #nextLevelBtn {
+      display: none;
+      margin: 20px auto;
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #1890ff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      width: 100%;
+    }
+
+    #nextLevelBtn:hover {
+      background-color: #0c80e9;
+    }
+
+    .infoCard {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .infoCard h3 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      color: #1890ff;
+    }
+
+    .infoCard p {
+      margin-bottom: 12px;
+    }
+
+    .didYouKnow {
+      font-style: italic;
+      font-size: 16px;
+      color: #555;
+      padding: 10px;
+      border-left: 3px solid #1890ff;
+      background-color: rgba(24, 144, 255, 0.1);
+      margin-top: 15px;
+    }
+
+    /* Social Login Button */
+    .socialBtn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 12px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-weight: 500;
+    }
+
+    .socialBtn img {
+      margin-right: 10px;
+      width: 20px;
+      height: 20px;
+    }
+
+    .socialBtn:hover {
+      background-color: #f5f5f5;
+    }
+
+    /* Google button */
+    .googleBtn {
+      background-color: #fff;
+      color: #555;
+      border: 1px solid #ddd;
+    }
+
+    .googleBtn:hover {
+      background-color: #f1f1f1;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 80%;
+      text-align: center;
+    }
+
+    /* Form styles */
+    .formGroup {
+      margin-bottom: 20px;
+    }
+
+    .formGroup label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .btn {
+      background-color: #1890ff;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #0c80e9;
+    }
+
+    .btn-secondary {
+      background-color: #f5f5f5;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+
+    .btn-secondary:hover {
+      background-color: #e5e5e5;
+    }
+
+    .tip {
+      font-size: 14px;
+      color: #888;
+      margin-top: 6px;
+    }
+
+    @keyframes celebrate {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .celebrate {
+      animation: celebrate 0.5s ease;
+    }
+
+    .completion-container {
+      margin-top: 30px;
+      border-top: 1px solid #eee;
+      padding-top: 20px;
+      text-align: center;
+    }
+
+    .trophy {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    .security-meter {
+      height: 24px;
+      width: 100%;
+      background-color: #e0e0e0;
+      border-radius: 12px;
+      margin: 15px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .security-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(to right, #ff4d4f 0%, #faad14 50%, #52c41a 100%);
+      border-radius: 12px;
+      transition: width 1s ease;
+    }
+
+    .security-score {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #333;
+      font-weight: bold;
+      text-shadow: 0px 0px 2px #fff;
+    }
+
+    .method-comparison {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+    }
+
+    .method-card {
+      flex: 1;
+      margin: 0 10px;
+      padding: 15px;
+      border-radius: 8px;
+      background-color: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .method-card h4 {
+      margin-top: 0;
+      color: #1890ff;
+    }
+
+    .pros-cons {
+      margin-top: 10px;
+    }
+
+    .pros-cons div {
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
+    .pro::before {
+      content: "✓ ";
+      color: #52c41a;
+    }
+
+    .con::before {
+      content: "✗ ";
+      color: #ff4d4f;
+    }
+
+    /* Back button */
+    .back-button {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #1890ff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .back-button:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <a href="level1.html" class="back-button">← Back to Level 1</a>
+  
+  <div class="header">
+    <h1>Password Game - Level 2 🔐</h1>
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+    </div>
+  </div>
+
+  <div class="infoCard">
+    <h3>Welcome to Level 2: Social Login 🚀</h3>
+    <p>In this level, you'll learn about social login authentication - a modern approach to account security and convenience.</p>
+    <div class="didYouKnow">
+      <strong>Did you know?</strong> Social login can be up to 50% faster than traditional password entry and reduces the risk of password-related vulnerabilities.
+    </div>
+  </div>
+
+  <div class="instructions">
+    <p>Complete the steps below to enhance your account security through social authentication!</p>
+  </div>
+
+  <div class="method-comparison">
+    <div class="method-card">
+      <h4>Traditional Passwords</h4>
+      <div class="pros-cons">
+        <div class="pro">You control your credentials</div>
+        <div class="pro">Works everywhere</div>
+        <div class="con">Need to remember complex passwords</div>
+        <div class="con">Vulnerable to phishing attacks</div>
+        <div class="con">Often reused across sites</div>
+      </div>
+    </div>
+    <div class="method-card">
+      <h4>Social Login</h4>
+      <div class="pros-cons">
+        <div class="pro">One-click authentication</div>
+        <div class="pro">No password to remember</div>
+        <div class="pro">Often includes 2FA protection</div>
+        <div class="con">Privacy concerns</div>
+        <div class="con">Dependent on the social provider</div>
+      </div>
+    </div>
+  </div>
+  
+  <div id="alerts"></div>
+
+  <div id="step1" class="formGroup">
+    <label for="email">Email address:</label>
+    <input type="email" id="email" placeholder="Enter your email address" />
+    <p class="tip">Your email will be used as a backup recovery method</p>
+  </div>
+
+  <div id="step2" style="display: none;">
+    <button id="googleLoginBtn" class="socialBtn googleBtn">
+      <img src="/level_1/images/google-icon.png" alt="Google icon" width="20" height="20">
+      Sign in with Google
+    </button>
+    <p class="tip">Clicking this button would normally redirect you to Google's authentication page</p>
+  </div>
+
+  <div id="step3" style="display: none;">
+    <div class="formGroup">
+      <label>Permissions requested:</label>
+      <div class="alert">
+        ✓ View your email address
+      </div>
+      <div class="alert">
+        ✓ View your basic profile info
+      </div>
+      <p class="tip">Review the permissions carefully before granting access</p>
+    </div>
+    <button id="authorizeBtn" class="btn">Authorize Access</button>
+    <button id="cancelBtn" class="btn btn-secondary" style="margin-left: 10px;">Cancel</button>
+  </div>
+
+  <div id="completion" style="display: none;">
+    <div class="security-meter">
+      <div class="security-bar" id="securityBar"></div>
+      <div class="security-score" id="securityScore">0%</div>
+    </div>
+    <div class="completion-container">
+      <div class="trophy">🏆</div>
+      <h3>Well done!</h3>
+      <p>You've successfully set up social login authentication!</p>
+      <p>This provides a balance of security and convenience for your accounts.</p>
+      <button id="nextLevelBtn" class="btn">Continue to Level 3: Two-Factor Authentication →</button>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div id="googleAuthModal" class="modal">
+    <div class="modal-content">
+      <h2>Google Authentication</h2>
+      <p>Simulating Google authentication process...</p>
+      <div style="margin: 20px 0;">
+        <img src="/level_1/images/google-logo.png" alt="Google logo" width="50" height="50">
+      </div>
+      <p id="authProgress">Connecting to Google...</p>
+    </div>
+  </div>
+
+  <script>
+    const emailInput = document.getElementById("email");
+    const step1 = document.getElementById("step1");
+    const step2 = document.getElementById("step2");
+    const step3 = document.getElementById("step3");
+    const completion = document.getElementById("completion");
+    const googleLoginBtn = document.getElementById("googleLoginBtn");
+    const authorizeBtn = document.getElementById("authorizeBtn");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const nextLevelBtn = document.getElementById("nextLevelBtn");
+    const googleAuthModal = document.getElementById("googleAuthModal");
+    const authProgress = document.getElementById("authProgress");
+    const progressBar = document.getElementById("progressBar");
+    const securityBar = document.getElementById("securityBar");
+    const securityScore = document.getElementById("securityScore");
+    const alertsContainer = document.getElementById("alerts");
+
+    // Email validation
+    emailInput.addEventListener("input", validateEmail);
+    
+    function validateEmail() {
+      const email = emailInput.value;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      
+      alertsContainer.innerHTML = "";
+      
+      if (email === "") {
+        addAlert("Please enter your email address");
+        return false;
+      } else if (!emailRegex.test(email)) {
+        addAlert("Please enter a valid email address");
+        return false;
+      } else {
+        step2.style.display = "block";
+        updateProgress(20);
+        return true;
+      }
+    }
+    
+    function addAlert(message, passed = false) {
+      const alert = document.createElement("div");
+      alert.className = "alert " + (passed ? "passed" : "");
+      alert.textContent = message;
+      alertsContainer.appendChild(alert);
+    }
+    
+    // Google login button
+    googleLoginBtn.addEventListener("click", () => {
+      if (!validateEmail()) return;
+      
+      // Show Google auth modal
+      googleAuthModal.style.display = "flex";
+      
+      // Simulate authentication process
+      setTimeout(() => {
+        authProgress.textContent = "Authenticating...";
+        setTimeout(() => {
+          authProgress.textContent = "Authentication successful!";
+          setTimeout(() => {
+            googleAuthModal.style.display = "none";
+            step3.style.display = "block";
+            updateProgress(50);
+          }, 1000);
+        }, 1500);
+      }, 1000);
+    });
+    
+    // Authorize button
+    authorizeBtn.addEventListener("click", () => {
+      // Hide step 3
+      step3.style.display = "none";
+      
+      // Animate security score
+      completion.style.display = "block";
+      animateSecurityScore();
+      
+      // Update progress
+      updateProgress(100);
+      
+      // Show next level button
+      setTimeout(() => {
+        nextLevelBtn.style.display = "block";
+        nextLevelBtn.classList.add("celebrate");
+        setTimeout(() => {
+          nextLevelBtn.classList.remove("celebrate");
+        }, 500);
+      }, 2000);
+    });
+    
+    // Cancel button
+    cancelBtn.addEventListener("click", () => {
+      step3.style.display = "none";
+      addAlert("Authentication cancelled. Please try again.");
+      updateProgress(20);
+    });
+    
+    // Update progress bar
+    function updateProgress(percent) {
+      progressBar.style.width = `${percent}%`;
+    }
+    
+    // Animate security score
+    function animateSecurityScore() {
+      let score = 0;
+      const targetScore = 75; // Social login provides good but not perfect security
+      
+      const interval = setInterval(() => {
+        score += 1;
+        securityBar.style.width = `${score}%`;
+        securityScore.textContent = `${score}%`;
+        
+        if (score >= targetScore) {
+          clearInterval(interval);
+        }
+      }, 20);
+    }
+    
+    // Next level button - MODIFIED FOR PROPER NAVIGATION
+    nextLevelBtn.addEventListener("click", () => {
+      // For demo, create a modal explaining what would happen next
+      const modal = document.createElement("div");
+      modal.style.position = "fixed";
+      modal.style.top = "0";
+      modal.style.left = "0";
+      modal.style.width = "100%";
+      modal.style.height = "100%";
+      modal.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+      modal.style.display = "flex";
+      modal.style.justifyContent = "center";
+      modal.style.alignItems = "center";
+      modal.style.zIndex = "1000";
+
+      const content = document.createElement("div");
+      content.style.backgroundColor = "white";
+      content.style.padding = "30px";
+      content.style.borderRadius = "10px";
+      content.style.maxWidth = "80%";
+      content.style.textAlign = "center";
+
+      content.innerHTML = `
+        <h2>Congratulations! 🎉</h2>
+        <p>You've completed Level 2: Social Login Authentication!</p>
+        <p>Level 3 will teach you about Two-Factor Authentication (2FA), which adds another layer of security to your account.</p>
+        <button id="continueBtn" style="background-color: #1890ff; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-top: 15px;">Continue to Level 3</button>
+      `;
+
+      modal.appendChild(content);
+      document.body.appendChild(modal);
+
+      document.getElementById("continueBtn").addEventListener("click", () => {
+        // Navigate to level 3
+        window.location.href = "level3.html";
+      });
+    });
+
+    // Add initial educational alert
+    addAlert("Learn how social login improves both security and convenience!", true);
+  </script>
+</body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Password Game - Completion</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+      padding: 0;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(135deg, #f0f7f4 0%, #e6f7ff 50%, #fffbe6 100%);
+      overflow-x: hidden;
+    }
+    
+    .container {
+      max-width: 800px;
+      padding: 40px;
+      background-color: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      margin: 20px;
+    }
+    
+    h1 {
+      font-size: 36px;
+      color: #444;
+      margin-bottom: 20px;
+    }
+    
+    h2 {
+      font-size: 24px;
+      color: #666;
+      margin-bottom: 30px;
+    }
+    
+    .badge-container {
+      margin: 30px 0;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .badge {
+      width: 200px;
+      height: 200px;
+      background-color: #6a0dad;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 80px;
+      box-shadow: 0 10px 20px rgba(106, 13, 173, 0.3);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .badge-glow {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      background: radial-gradient(circle, rgba(106, 13, 173, 0.5) 0%, rgba(106, 13, 173, 0) 70%);
+      border-radius: 50%;
+      animation: pulse 3s infinite;
+      z-index: 0;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.1); opacity: 0.5; }
+      100% { transform: scale(1); opacity: 0.7; }
+    }
+    
+    .security-levels {
+      display: flex;
+      justify-content: space-between;
+      margin: 40px 0;
+      flex-wrap: wrap;
+    }
+    
+    .level-card {
+      flex: 1;
+      min-width: 200px;
+      background-color: #fff;
+      margin: 10px;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .level-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .level-card h3 {
+      font-size: 18px;
+      color: #444;
+      margin-bottom: 15px;
+    }
+    
+    .level-icon {
+      font-size: 40px;
+      margin-bottom: 15px;
+    }
+    
+    .level-1 .level-icon {
+      color: #4CAF50;
+    }
+    
+    .level-2 .level-icon {
+      color: #1890ff;
+    }
+    
+    .level-3 .level-icon {
+      color: #6a0dad;
+    }
+    
+    .certificate {
+      margin: 20px 0;
+      padding: 30px;
+      border: 2px dashed #6a0dad;
+      border-radius: 10px;
+      background-color: #faf8ff;
+      position: relative;
+    }
+    
+    .certificate:after {
+      content: "CERTIFIED";
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      font-size: 12px;
+      color: #6a0dad;
+      border: 1px solid #6a0dad;
+      padding: 5px 10px;
+      border-radius: 5px;
+      transform: rotate(15deg);
+      opacity: 0.6;
+    }
+    
+    .certificate h3 {
+      font-size: 20px;
+      color: #6a0dad;
+      margin-bottom: 10px;
+    }
+    
+    .certificate-name {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 15px 0;
+      font-family: 'Courier New', monospace;
+      color: #222;
+    }
+    
+    .btn-container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 15px 30px;
+      background-color: #6a0dad;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: transform 0.3s, background-color 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(106, 13, 173, 0.2);
+    }
+    
+    .btn:hover {
+      background-color: #5a0c93;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(106, 13, 173, 0.3);
+    }
+    
+    .btn-secondary {
+      background-color: #f5f5f5;
+      color: #333;
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-secondary:hover {
+      background-color: #e5e5e5;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    }
+    
+    .btn-icon {
+      font-size: 24px;
+      margin-right: 10px;
+    }
+    
+    .security-tips {
+      margin-top: 40px;
+      padding: 20px;
+      background-color: #f0f7f4;
+      border-radius: 10px;
+      text-align: left;
+    }
+    
+    .security-tips h3 {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #444;
+    }
+    
+    .security-tips ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+    
+    .security-tips li {
+      margin-bottom: 10px;
+    }
+    
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background-color: #f00;
+      border-radius: 50%;
+      top: -10px;
+      animation: fall linear forwards;
+    }
+    
+    @keyframes fall {
+      to {
+        transform: translateY(100vh);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎉 Security Expert Achievement Unlocked! 🎉</h1>
+    <h2>Congratulations on completing the Password Game</h2>
+    
+    <div class="badge-container">
+      <div class="badge-glow"></div>
+      <div class="badge">🔒</div>
+    </div>
+    
+    <div class="certificate">
+      <h3>Certificate of Achievement</h3>
+      <p>This certifies that</p>
+      <div class="certificate-name">Security Expert</div>
+      <p>has successfully mastered all three levels of account security</p>
+      <p>Date: <span id="currentDate">May 8, 2025</span></p>
+    </div>
+    
+    <div class="security-levels">
+      <div class="level-card level-1">
+        <div class="level-icon">🔑</div>
+        <h3>Level 1</h3>
+        <p>Strong Password Creation</p>
+        <p>You learned how to create complex, unique passwords that are difficult to crack.</p>
+      </div>
+      
+      <div class="level-card level-2">
+        <div class="level-icon">📱</div>
+        <h3>Level 2</h3>
+        <p>Social Login</p>
+        <p>You discovered how social login provides convenience while maintaining security.</p>
+      </div>
+      
+      <div class="level-card level-3">
+        <div class="level-icon">🛡️</div>
+        <h3>Level 3</h3>
+        <p>Two-Factor Authentication</p>
+        <p>You set up 2FA, making your accounts nearly impossible to breach.</p>
+      </div>
+    </div>
+    
+    <div class="security-tips">
+      <h3>Key Security Takeaways</h3>
+      <ul>
+        <li><strong>Use unique passwords</strong> for each account to prevent credential stuffing attacks.</li>
+        <li><strong>Enable two-factor authentication</strong> whenever possible for maximum account protection.</li>
+        <li><strong>Consider a password manager</strong> to securely store complex passwords.</li>
+        <li><strong>Watch out for phishing attempts</strong> - never enter credentials on suspicious sites.</li>
+        <li><strong>Regularly update passwords</strong>, especially for sensitive accounts like banking and email.</li>
+      </ul>
+    </div>
+    
+    <h3>Ready for another challenge?</h3>
+    <p>Test your security knowledge again or return to the home page</p>
+    
+    <div class="btn-container">
+      <a href="level1.html" class="btn">
+        <span class="btn-icon">🔄</span> Play Again
+      </a>
+      <a href="/index.html" class="btn btn-secondary">
+        <span class="btn-icon">🏠</span> Return to Home
+      </a>
+    </div>
+  </div>
+  
+  <script>
+    // Set current date
+    const dateElement = document.getElementById('currentDate');
+    const currentDate = new Date();
+    dateElement.textContent = currentDate.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+    
+    // Create confetti effect
+    function createConfetti() {
+      const confettiCount = 150;
+      const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+      
+      for (let i = 0; i < confettiCount; i++) {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        
+        // Random position
+        const left = Math.random() * 100;
+        confetti.style.left = left + 'vw';
+        
+        // Random color
+        const colorIndex = Math.floor(Math.random() * colors.length);
+        confetti.style.backgroundColor = colors[colorIndex];
+        
+        // Random size
+        const size = Math.random() * 10 + 5;
+        confetti.style.width = size + 'px';
+        confetti.style.height = size + 'px';
+        
+        // Random rotation
+        confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+        
+        // Random animation duration
+        const duration = Math.random() * 3 + 2;
+        confetti.style.animationDuration = duration + 's';
+        
+        document.body.appendChild(confetti);
+        
+        // Remove confetti after animation
+        setTimeout(() => {
+          confetti.remove();
+        }, duration * 1000);
+      }
+    }
+    
+    // Run confetti effect when page loads
+    window.addEventListener('load', function() {
+      createConfetti();
+      
+      // Another burst after 2 seconds
+      setTimeout(createConfetti, 2000);
+    });
+  </script>
+</body>
+</html>
