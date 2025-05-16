@@ -12,7 +12,7 @@
         font-family: 'Courier New', Courier, monospace;
     }
     .level1-bg{
-        background-image: url('/level_1/images/level_1.jpg');
+        background-image: url('/level_1/images/level1_bg.jpg');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -24,21 +24,22 @@
         background-repeat: no-repeat;
     }
     .level3-bg{
-        background-image: url('/1.jpg');
+        background-image: url('level3_bg.jpg');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
     }
     .level4-bg{
-        background-image: url('level_4/images/level_4.jpg');
+        background-image: url('level_4/TemplateData/level4_bg.jpg');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
     }
 </style>
 <body>
-    <nav class="bg-black border-b-1 border-white shadow-lg shadow-black">
+    <nav class="bg-black border-b-1 border-white shadow-lg shadow-black flex justify-between">
         <h1 class="text-white p-4">CyberGames</h1>
+        <button class="border-2 border-white rounded-md"><a href="userManual.pdf" download="userManual.pdf" class="text-white p-4">Download User Manual</a></button>
     </nav>
     <main>
         <div class="bg-gray-800">
@@ -53,7 +54,7 @@
     <div class="bg-black"> 
         <p class="text-white text-xl p-4 flex justify-center font-bold">List of Our Games</p> 
         <ul class="flex justify-between">
-            <li class="p-4 flex flex-col justify-between items-center w-1/4 h-[200px]">
+            <li class="p-4 flex flex-col justify-between items-center w-1/4 h-[200px] level1-bg">
                 <div class="flex flex-col items-center">
                     <span class="text-white font-bold ">Level 1: Securing Password</span>
                     <p class="text-white text-sm mt-1 text-center">Play the cyber game related to securing password. complete the game and get the knowledge about more secured password</p>
@@ -67,14 +68,14 @@
                 </div>
                 <button type="button" id="level2" class="px-4 py-1 bg-green-500 text-white rounded hover:bg-gray-200 hover:text-black">Play</button>
             </li>
-            <li class="p-4 flex flex-col justify-between items-center w-1/4 h-[200px]">
+            <li class="p-4 flex flex-col justify-between items-center w-1/4 h-[200px] level3-bg">
                 <div class="flex flex-col items-center">
                     <span class="text-white font-bold">Level 3: Cyber Hygiene</span>
                     <p class="text-white text-sm mt-1 text-center">Complete a series of how to maintain the good protection of your security and privacy</p>
                 </div>
                 <button type="button" id="level3" class="px-4 py-1 bg-green-500 text-white rounded hover:bg-gray-200 hover:text-black">Play</button>
             </li>
-            <li class="p-4 flex flex-col justify-between items-center w-1/4 h-[200px] level1-bg">
+            <li class="p-4 flex flex-col justify-between items-center w-1/4 h-[200px] level4-bg">
                 <div class="flex flex-col items-center">
                     <span class="text-white font-bold">Level 4: Mallware Attack</span>
                     <p class="text-white text-sm mt-1 text-center">Learn about the different types of malware and how to protect against them</p>
