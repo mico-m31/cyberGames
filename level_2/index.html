@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | GamePhisingDetector</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <title>Phising Detector</title>
     <link rel="stylesheet" href="TemplateData/style.css">
+    <link rel="icon" href="/phising.png" type="image/png">
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
@@ -20,7 +20,7 @@
       <div id="unity-footer">
         <div id="unity-webgl-logo"></div>
         <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">GamePhisingDetector</div>
+        <div id="unity-build-title">Phising Detector</div>
       </div>
     </div>
     <script>
@@ -57,14 +57,14 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/PhisingDetector.loader.js";
+      var loaderUrl = buildUrl + "/Phising Detector WebGL.loader.js";
       var config = {
-        dataUrl: buildUrl + "/PhisingDetector.data",
-        frameworkUrl: buildUrl + "/PhisingDetector.framework.js",
-        codeUrl: buildUrl + "/PhisingDetector.wasm",
+        dataUrl: buildUrl + "/Phising Detector WebGL.data",
+        frameworkUrl: buildUrl + "/Phising Detector WebGL.framework.js",
+        codeUrl: buildUrl + "/Phising Detector WebGL.wasm",
         streamingAssetsUrl: "StreamingAssets",
-        companyName: "DefaultCompany",
-        productName: "GamePhisingDetector",
+        companyName: "ICON+",
+        productName: "Phising Detector",
         productVersion: "1.0",
         showBanner: unityShowBanner,
       };
@@ -103,8 +103,8 @@
       } else {
         // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
 
-        canvas.style.width = "100%";
-        canvas.style.height = "100%";
+        canvas.style.width = "960px";
+        canvas.style.height = "600px";
       }
 
       loadingBar.style.display = "block";

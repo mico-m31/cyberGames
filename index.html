@@ -1,139 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Menu</title>
+    <title>CyberGames</title>
+    <link rel="icon" href="/cyber_game.png" type="image/png">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
 <style>
-    html{
+    html {
         font-family: 'Courier New', Courier, monospace;
     }
-    .level1-bg{
-        background-image: url('/level_1/images/level1_bg.jpg');
+
+    .level1-bg {
+        background-image: url('level_1/images/level1_bg.jpg');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
     }
-    .level2-bg{
-        background-image: url('/level_2/TemplateData/level_2.jpg');
+
+    .level2-bg {
+        background-image: url('level_2/TemplateData/level_2.jpg');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
     }
-    .level3-bg{
-        background-image: url('level3_bg.jpg');
+
+    .level3-bg {
+        background-image: url('level_3/TemplateData/level3_bg.jpg');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
     }
-    .level4-bg{
+
+    .level4-bg {
         background-image: url('level_4/TemplateData/level4_bg.jpg');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
     }
+
+    .coming-soon-bg {
+        background-image: url('question_mark_bg.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
 </style>
+
 <body>
-    <nav class="bg-black border-b-1 border-white shadow-lg shadow-black flex justify-between">
+    <nav class="bg-black  shadow-lg shadow-black flex justify-between items-center">
         <h1 class="text-white p-4">CyberGames</h1>
-        <button class="border-2 border-white rounded-md"><a href="userManual.pdf" download="userManual.pdf" class="text-white p-4">Download User Manual</a></button>
+        <div class="flex items-center gap-2">
+            <button class="hover:bg-green-600 p-2 rounded-md transition-colors duration-200 active:bg-green-300 cursor-pointer">
+                <a href="/guide" class="text-white p-4">Download User Manual</a>
+            </button>
+            <button id="progressBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Progress</button>
+            <button id="logoutBtn" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Logout</button>
+        </div>
     </nav>
     <main>
         <div class="bg-gray-800">
-        <h2 class="text-white p-4 font-bold"  >Welcome to CyberGames</h2>
-        <pre class="text-white p-4">
+            <h2 class="text-white p-4 font-bold">Welcome to CyberGames</h2>
+            <pre class="text-white p-4">
             CyberGames is a platform for learning about cybersecurity. 
             Where this platform provide a learning process in the 
             form of games. make it fun and also educational.
         </pre>
-          
-    </div>
-    <div class="bg-black"> 
-        <p class="text-white text-xl p-4 flex justify-center font-bold">List of Our Games</p> 
-        <ul class="flex justify-between">
-            <li class="p-4 flex flex-col justify-between items-center w-1/4 h-[200px] level1-bg">
-                <div class="flex flex-col items-center">
-                    <span class="text-white font-bold ">Level 1: Securing Password</span>
-                    <p class="text-white text-sm mt-1 text-center">Play the cyber game related to securing password. complete the game and get the knowledge about more secured password</p>
+
+        </div>
+        <div class="bg-black">
+            <p class="text-white text-xl p-4 flex justify-center font-bold">List of Our Games</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+                <div class="p-4 flex flex-col justify-between items-center h-[250px] level1-bg rounded-lg shadow-lg">
+                    <div class="flex flex-col items-center">
+                        <span class="text-white font-bold text-lg">Level 1: Securing Password</span>
+                        <p class="text-white text-sm mt-2 text-center">Play the cyber game related to securing password.
+                            Complete the game and get the knowledge about more secured password</p>
+                    </div>
+                    <button type="button" id="level1"
+                        class="cursor-pointer px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-200">Play</button>
                 </div>
-                <button type="button" id="level1"class="px-4 py-1 bg-green-500 text-white rounded hover:bg-gray-200 hover:text-black focus:bg-gray-200 ">Play</button>
-            </li>
-            <li class="p-4 flex flex-col justify-between items-center w-1/4 h-[200px] level2-bg">
-                <div class="flex flex-col items-center">
-                    <span class="text-white font-bold">Level 2: Phising detector</span>
-                    <p class="text-white text-sm mt-1 text-center">There's an email send to you, play the game and gain the knowledge about how to detect the phising email</p>
+                <div class="p-4 flex flex-col justify-between items-center h-[250px] level2-bg rounded-lg shadow-lg">
+                    <div class="flex flex-col items-center">
+                        <span class="text-white font-bold text-lg">Level 2: Phishing Detector</span>
+                        <p class="text-white text-sm mt-2 text-center">There's an email sent to you, play the game and
+                            gain the knowledge about how to detect phishing emails</p>
+                    </div>
+                    <button type="button" id="level2"
+                        class="cursor-pointer px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-200">Play</button>
                 </div>
-                <button type="button" id="level2" class="px-4 py-1 bg-green-500 text-white rounded hover:bg-gray-200 hover:text-black">Play</button>
-            </li>
-            <li class="p-4 flex flex-col justify-between items-center w-1/4 h-[200px] level3-bg">
-                <div class="flex flex-col items-center">
-                    <span class="text-white font-bold">Level 3: Cyber Hygiene</span>
-                    <p class="text-white text-sm mt-1 text-center">Complete a series of how to maintain the good protection of your security and privacy</p>
+
+                <div class="p-4 flex flex-col justify-between items-center h-[250px] level3-bg rounded-lg shadow-lg">
+                    <div class="flex flex-col items-center">
+                        <span class="text-white font-bold text-lg">Level 3: Cyber Hygiene</span>
+                        <p class="text-white text-sm mt-2 text-center">Complete a series of how to maintain the good
+                            protection of your security and privacy</p>
+                    </div>
+                    <button type="button" id="level3"
+                        class="cursor-pointer px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-200">Play</button>
+
                 </div>
-                <button type="button" id="level3" class="px-4 py-1 bg-green-500 text-white rounded hover:bg-gray-200 hover:text-black">Play</button>
-            </li>
-            <li class="p-4 flex flex-col justify-between items-center w-1/4 h-[200px] level4-bg">
-                <div class="flex flex-col items-center">
-                    <span class="text-white font-bold">Level 4: Mallware Attack</span>
-                    <p class="text-white text-sm mt-1 text-center">Learn about the different types of malware and how to protect against them</p>
+                <div class="p-4 flex flex-col justify-between items-center h-[250px] level4-bg rounded-lg shadow-lg">
+                    <div class="flex flex-col items-center">
+                        <span class="text-white font-bold text-lg">Level 4: Malware Attack</span>
+                        <p class="text-white text-sm mt-2 text-center">Complete a series of challenges to maintain good
+                            protection of your security and privacy</p>
+                    </div>
+                    <button type="button" id="level4"
+                        class="cursor-pointer px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-200">Play</button>
                 </div>
-                <button type="button" id="level4" class="px-4 py-1 bg-green-500 text-white rounded hover:bg-gray-200 hover:text-black">Play</button>
-            </li>
-        </ul>
-    </div>
-    <div class="bg-white text-black p-8">
-        <h2 class="text-2xl font-bold mb-6 text-center">Level Explanations</h2>
-        <div class="space-y-8">
-            <div class="flex ">
-                <div class="w-1/2 p-6 border-r-2 border-black bg-gray-200 rounded-lg shadow-lg shadow-gray-400">
-                    <h3 class="text-xl font-bold mb-3">Level 1: Securing Password</h3>
-                    <p class="text-gray-black">in this level, you will learn about the importance of securing your password and how to create a strong password. User require to input the correct password based on the suggestion to pass the level, this level consist of 3 stage, where user need to complete all the stage to pass this level</p>
+                <div
+                    class="p-4 flex flex-col justify-between items-center h-[250px] coming-soon-bg rounded-lg shadow-lg">
+                    <div class="flex flex-col items-center">
+                        <span class="text-white font-bold text-lg">Level 5: Coming Soon</span>
+                    </div>
                 </div>
-                <div class="w-1/2"></div>
-            </div>
-            <div class="flex flex-row-reverse">
-                <div class="w-1/2 p-6 border-r-2 border-black bg-gray-200 rounded-lg shadow-lg shadow-gray-400">
-                    <h3 class="text-xl font-bold mb-3">Level 2: Phising detector</h3>
-                    <p class="text-gray-black">In this level, User will receive an email, where user need to detect is the emails is a phising email or not based on the content of the email, if the email is a phising email, user need to click the button "Report" to report the email, if the email is not a phising email, user need to click the button "Not Phising" to pass the level.</p>
+                <div
+                    class="p-4 flex flex-col justify-between items-center h-[250px] coming-soon-bg rounded-lg shadow-lg">
+                    <div class="flex flex-col items-center">
+                        <span class="text-white font-bold text-lg">Level 6: Coming Soon</span>
+                    </div>
                 </div>
-                <div class="w-1/2"></div>
-            </div>
-            <div class="flex">
-                <div class="w-1/2 p-6 border-r-2 border-black bg-gray-200 rounded-lg shadow-lg shadow-gray-400">
-                    <h3 class="text-xl font-bold mb-3">Level 3: Cyber Hygiene</h3>
-                    <p class="text-gray-black">This level require user to complete a series of how to maintain the good protection of your security and privacy. where user need to complete certain task that is related to a habit to maintain the good protection in using technology.</p>
-                </div>
-                <div class="w-1/2"></div>
-            </div>
-            <div class="flex flex-row-reverse">
-                <div class="w-1/2 p-6 border-r-2 border-black bg-gray-200 rounded-lg shadow-lg shadow-gray-400">
-                    <h3 class="text-xl font-bold mb-3">Level 4: Mallware Attack</h3>
-                    <p class="text-gray-black">This level consist of 4 stage, where on the each stage the malware will be different, user need to choose the correct protection to destroy the malware and protect the system.</p>
-                </div>
-                <div class="w-1/2"></div>
             </div>
         </div>
-    </div>
+        <div class="bg-white text-black p-8">
+            <h2 class="text-2xl font-bold mb-6 text-center">Level Explanations</h2>
+            <div class="space-y-8">
+                <div class="flex ">
+                    <div class="w-1/2 p-6 border-r-2 border-black bg-gray-200 rounded-lg shadow-lg shadow-gray-400">
+                        <h3 class="text-xl font-bold mb-3">Level 1: Securing Password</h3>
+                        <p class="text-gray-black">in this level, you will learn about the importance of securing your
+                            password and how to create a strong password. User require to input the correct password
+                            based on the suggestion to pass the level, this level consist of 3 stage, where user need to
+                            complete all the stage to pass this level</p>
+                    </div>
+
+                </div>
+                <div class="flex flex-row-reverse">
+                    <div class="w-1/2 p-6 border-r-2 border-black bg-gray-200 rounded-lg shadow-lg shadow-gray-400">
+                        <h3 class="text-xl font-bold mb-3">Level 2: Phising detector</h3>
+                        <p class="text-gray-black">In this level, User will receive an email, where user need to detect
+                            is the emails is a phising email or not based on the content of the email, if the email is a
+                            phising email, user need to click the button "Report" to report the email, if the email is
+                            not a phising email, user need to click the button "Not Phising" to pass the level.</p>
+                    </div>
+
+                </div>
+                <div class="flex">
+                    <div class="w-1/2 p-6 border-r-2 border-black bg-gray-200 rounded-lg shadow-lg shadow-gray-400">
+                        <h3 class="text-xl font-bold mb-3">Level 3: Cyber Hygiene</h3>
+                        <p class="text-gray-black">This level require user to complete a series of how to maintain the
+                            good protection of your security and privacy. where user need to complete certain task that
+                            is related to a habit to maintain the good protection in using technology.</p>
+                    </div>
+
+                </div>
+                <div class="flex flex-row-reverse">
+                    <div class="w-1/2 p-6 border-r-2 border-black bg-gray-200 rounded-lg shadow-lg shadow-gray-400">
+                        <h3 class="text-xl font-bold mb-3">Level 4: Malware Attack</h3>
+                        <p class="text-gray-black">This level consist of 4 stage, where on the each stage the malware
+                            will be different, user need to choose the correct protection to destroy the malware and
+                            protect the system.</p>
+                    </div>
+
+                </div>
+                <div class="flex">
+                    <div class="w-1/2 p-6 border-r-2 border-black bg-gray-200 rounded-lg shadow-lg shadow-gray-400">
+                        <h3 class="text-xl font-bold mb-3">Level 5: COMING SOON</h3>
+                        <p class="text-gray-black"></p>
+                    </div>
+
+                </div>
+                <div class="flex flex-row-reverse">
+                    <div class="w-1/2 p-6 border-r-2 border-black bg-gray-200 rounded-lg shadow-lg shadow-gray-400">
+                        <h3 class="text-xl font-bold mb-3">Level 6: COMING SOON</h3>
+                        <p class="text-gray-black"></p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
     </main>
     <footer class="bg-black text-white p-4">
         <p class="text-center">Copyright &copy; 2025 CyberGames</p>
     </footer>
+    <div id="progressModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-8 w-96 relative">
+            <button id="closeProgressModal" class="absolute top-2 right-2 text-gray-500 hover:text-black">&times;</button>
+            <h2 class="text-xl font-bold mb-4">Your Game Progress</h2>
+            <div id="progressContent" class="text-gray-800"></div>
+        </div>
+    </div>
     <script>
-        document.getElementById('level1').addEventListener('click', function() {
-            window.location.href = '/level_1/index.html';
+        document.getElementById('level1').addEventListener('click', function () {
+            window.location.href = '/level_1';
         });
-        document.getElementById('level2').addEventListener('click', function() {
-            window.location.href = '/level_2/index.html';
+        document.getElementById('level2').addEventListener('click', function () {
+            window.location.href = '/level_2';
         });
-        document.getElementById('level3').addEventListener('click', function() {
-            window.location.href = 'level3.html';
-        }); 
-        document.getElementById('level4').addEventListener('click', function() {
-            window.location.href = 'level_4/index.html';
+        document.getElementById('level3').addEventListener('click', function () {
+            window.location.href = '/level_3';
+        });
+        document.getElementById('level4').addEventListener('click', function () {
+            window.location.href = '/level_4';
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            fetch('/api/logout', { method: 'POST' })
+                .then(res => res.json())
+                .then(data => {
+                    window.location.href = '/login';
+                });
+        });
+        
+        document.getElementById('progressBtn').addEventListener('click', function () {
+            fetch('/api/progress')
+                .then(res => res.json())
+                .then(data => {
+                    const content = document.getElementById('progressContent');
+                    if (data.success && data.progress) {
+                        let html = '<ul class="list-disc pl-5">';
+                        data.progress.forEach(row => {
+                            html += `<li><b>${row.game_name}</b>: ${row.completed ? '✅ Completed' : '❌ Not Completed'}${row.completed ? ' (at ' + row.completed_at + ')' : ''}</li>`;
+                        });
+                        html += '</ul>';
+                        content.innerHTML = html;
+                    } else {
+                        content.innerHTML = '<p>No progress data found.</p>';
+                    }
+                    document.getElementById('progressModal').classList.remove('hidden');
+                });
+        });
+        document.getElementById('closeProgressModal').addEventListener('click', function () {
+            document.getElementById('progressModal').classList.add('hidden');
         });
     </script>
 </body>
+
 </html>

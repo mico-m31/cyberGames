@@ -1,7 +1,19 @@
-FROM nginx:alpine
-COPY . /usr/share/nginx/html
-COPY level_4 /usr/share/nginx/html/level_4/TemplateData
-COPY level_1 /usr/share/nginx/html/level_1/images
-COPY level_2 /usr/share/nginx/html/level_2/TemplateData
-COPY userManual.pdf /usr/share/nginx/html/userManual.pdf
+FROM golang:1.23.3-alpine
+
+WORKDIR /app
+
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+
+RUN mkdir -p /app/auth/templates
+COPY auth/templates/*.html /app/auth/templates/
+
+RUN cd auth && go build -o main
+
 EXPOSE 80
+
+WORKDIR /app/auth
+
+CMD ["./main"]

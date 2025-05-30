@@ -311,7 +311,7 @@
       <a href="level1.html" class="btn">
         <span class="btn-icon">🔄</span> Play Again
       </a>
-      <a href="/index.html" class="btn btn-secondary">
+      <a href="/game" class="btn btn-secondary">
         <span class="btn-icon">🏠</span> Return to Home
       </a>
     </div>
@@ -325,6 +325,23 @@
       year: 'numeric', 
       month: 'long', 
       day: 'numeric' 
+    });
+    
+    // Mark level 1 as complete
+    fetch('/api/complete-level?game_name=Password Game(Level_1)', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) {
+            console.error('Failed to mark level as complete:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error marking level as complete:', error);
     });
     
     // Create confetti effect
