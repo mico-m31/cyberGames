@@ -5,6 +5,9 @@ import (
 	"database/sql"
 	"encoding/hex"
 	"encoding/json"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
+	"golang.org/x/crypto/bcrypt"
 	"html/template"
 	"log"
 	"net/http"
@@ -13,11 +16,7 @@ import (
 	"strings"
 	"sync"
 	"time"
-	"github.com/joho/godotenv"
-	_ "github.com/go-sql-driver/mysql"
-	"golang.org/x/crypto/bcrypt"
 )
-
 
 type User struct {
 	ID           int    `json:"id"`
@@ -40,8 +39,8 @@ type Session struct {
 var (
 	db        *sql.DB
 	templates *template.Template
-	sessions  = make(map[string]*Session) 
-	sessionMu sync.RWMutex                
+	sessions  = make(map[string]*Session)
+	sessionMu sync.RWMutex
 )
 
 func init() {
@@ -186,7 +185,7 @@ func main() {
 	}
 
 	http.Handle("/level_1/", http.StripPrefix("/level_1/", http.FileServer(http.Dir("../level_1"))))
-	http.Handle("/level_2/", noCache(http.StripPrefix("/level_2/", http.FileServer(http.Dir("../level_2_v2")))))
+	http.Handle("/level_2/", noCache(http.StripPrefix("/level_2/", http.FileServer(http.Dir("../level_2")))))
 	http.Handle("/level_3/", http.StripPrefix("/level_3/", http.FileServer(http.Dir("../level_3"))))
 	http.Handle("/level_4/", http.StripPrefix("/level_4/", http.FileServer(http.Dir("../level_4"))))
 
@@ -444,7 +443,7 @@ func handleLogin(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(response)
 		return
 	}
-						
+
 	sessionToken, err := createSession(storedUser.ID, storedUser.Username)
 	if err != nil {
 		http.Error(w, "Error creating session", http.StatusInternalServerError)
